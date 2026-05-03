@@ -1,36 +1,71 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 穴党参謀AI フロントエンド
 
-## Getting Started
+火水木の NAR 本命厳格パターンを会員限定で配信する Next.js フロントエンド。
 
-First, run the development server:
+## 必要環境
+
+- Node.js 22+
+- pnpm 10+
+
+## ローカル起動
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
+cp .env.example .env.local
+# .env.local の値を埋める
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+→ http://localhost:3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## ディレクトリ構成
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+src/
+├── app/
+│   ├── page.tsx          # LP（TOP）
+│   ├── login/            # LINE Login 起動
+│   ├── today/            # 本日の本命表示（要認証＋友だち）
+│   ├── about/            # 運用ルール
+│   └── api/
+│       ├── auth/callback # LINE Login コールバック
+│       ├── auth/logout
+│       └── predictions   # バックエンド API プロキシ
+├── components/           # 共通 UI
+├── lib/                  # サーバー側ヘルパー
+│   ├── env.ts            # 型付き環境変数
+│   ├── session.ts        # iron-session
+│   ├── line-login.ts     # LINE OAuth
+│   ├── predictions.ts    # バックエンド API プロキシ
+│   └── supabase.ts       # Supabase admin
+└── types/                # 共通型
+public/images/            # 画像アセット
+```
 
-## Learn More
+## 認証フロー
 
-To learn more about Next.js, take a look at the following resources:
+1. `/login` でセッションに OAuth state を保存し、`https://access.line.me/oauth2/v2.1/authorize` へリダイレクト
+2. LINE 側で承認 → `/api/auth/callback` に code が返る
+3. code を `access_token` に交換、profile + friendship status を取得
+4. session に `SessionUser` を保存して `/today` へ
+5. `friendFlag=false` の場合は `/today?need_friend=1` で友だち追加を促す
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## ブランド分離ポリシー
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- 内部技術名・データソース名は一切 UI に出さない
+- バックエンド API プロキシ（`/api/predictions`）は外部に内部URL を漏らさない
+- HTTP ヘッダーや HTML コメントから内部識別子を除去
 
-## Deploy on Vercel
+## ビルドとデプロイ
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+pnpm build
+pnpm start
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Vercel デプロイ時は環境変数を Vercel ダッシュボードで設定すること。`AUTH_SESSION_SECRET` は `openssl rand -base64 32` で生成した値を使う。
+
+## 重要
+
+- `_credentials_DO_NOT_COMMIT.txt` および `.env.local` は **絶対に git commit しない**
+- `assets-source/` は本番ビルドに含まれない（`.gitignore` 対象）
