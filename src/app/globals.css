@@ -1,45 +1,70 @@
 @import "tailwindcss";
 
 :root {
-  --background: #09090b;
-  --foreground: #fafafa;
-  --accent: #d4af37;
-  --accent-strong: #f0c44a;
-  --danger: #e94560;
-  --muted: #71717a;
+  --c-bg: #0a0a0c;
+  --c-bg-deep: #070708;
+  --c-ink: #f4efe2;
+  --c-ink-soft: rgba(244, 239, 226, 0.75);
+  --c-ink-mute: rgba(244, 239, 226, 0.5);
+  --c-gold: #e6b94a;
+  --c-gold-deep: #a8801e;
+  --c-gold-soft: rgba(230, 185, 74, 0.22);
+  --c-line: rgba(230, 185, 74, 0.18);
+  --c-green: #06c755;
+}
+
+:root {
+  --font-sans: "Noto Sans JP", -apple-system, "Hiragino Kaku Gothic ProN",
+    "Yu Gothic", sans-serif;
+  --font-serif: "Shippori Mincho", "Yu Mincho", "Hiragino Mincho ProN", serif;
+  --font-roman: "Cormorant Garamond", "Times New Roman", serif;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-accent: var(--accent);
-  --color-accent-strong: var(--accent-strong);
-  --color-danger: var(--danger);
-  --font-sans: var(--font-sans-jp);
+  --color-bg: var(--c-bg);
+  --color-ink: var(--c-ink);
+  --color-gold: var(--c-gold);
+  --color-green: var(--c-green);
 }
 
 html,
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans-jp), -apple-system, "Hiragino Kaku Gothic ProN",
-    "Yu Gothic", sans-serif;
+  background: var(--c-bg);
+  color: var(--c-ink);
+  font-family: var(--font-sans);
 }
 
-/* グローバルなクラスショートカット */
-.brand-gradient {
-  background: linear-gradient(135deg, #d4af37 0%, #f0c44a 50%, #b8860b 100%);
+/* Reusable gradient text helper */
+.gradient-gold-text {
+  background: linear-gradient(135deg, #fff 0%, var(--c-gold) 70%, var(--c-gold-deep) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
-.brand-divider {
-  height: 2px;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(212, 175, 55, 0.5) 50%,
-    transparent 100%
-  );
+.gradient-gold-only {
+  background: linear-gradient(135deg, var(--c-gold), var(--c-gold-deep));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.gradient-ink-to-gold {
+  background: linear-gradient(180deg, var(--c-ink) 0%, var(--c-gold) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Loading animation for /login transition page (referenced from design) */
+@keyframes anatouLoadDot {
+  0%,
+  100% {
+    opacity: 0.25;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-3px);
+  }
 }

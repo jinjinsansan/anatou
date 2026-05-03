@@ -58,3 +58,7 @@ Thumbs.db
 
 # original asset sources (large, kept locally only)
 /assets-source/
+
+# design intake (zip + extracted preview, kept locally only)
+/_design_inbox/
+*.zip

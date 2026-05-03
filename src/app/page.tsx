@@ -1,10 +1,14 @@
 import Image from "next/image";
-import Link from "next/link";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { Eyebrow, GreenCTA, GoldCard, GradientGold, GradientGoldOnly } from "@/components/ui";
+import { COLORS, GRADIENTS } from "@/lib/design-tokens";
 import { getSession } from "@/lib/session";
 
-const BRAND = process.env.NEXT_PUBLIC_BRAND_NAME ?? "穴党参謀AI";
+const STATS_RECOVERY = "396.9%";
+const STATS_CI_LOWER = "225%";
+const STATS_SAMPLES = "145";
+const STATS_UNIT = "¥100";
 
 export default async function HomePage() {
   const session = await getSession();
@@ -12,164 +16,712 @@ export default async function HomePage() {
 
   return (
     <>
-      <Header isLoggedIn={isLoggedIn} />
+      {/* Desktop */}
+      <div className="hidden md:block">
+        <DesktopTop isLoggedIn={isLoggedIn} />
+      </div>
+      {/* Mobile */}
+      <div className="block md:hidden">
+        <MobileTop isLoggedIn={isLoggedIn} />
+      </div>
+    </>
+  );
+}
 
-      {/* Hero */}
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0 -z-10">
+/* ============================================================
+ * Desktop (1280px design)
+ * ============================================================ */
+
+function DesktopTop({ isLoggedIn }: { isLoggedIn: boolean }) {
+  return (
+    <div style={{ background: COLORS.bg, color: COLORS.ink }}>
+      {/* Header overlay on hero */}
+      <div style={{ position: "relative" }}>
+        <Header isLoggedIn={isLoggedIn} variant="overlay" />
+
+        {/* Hero */}
+        <section style={{ position: "relative", height: 820, overflow: "hidden" }}>
           <Image
             src="/images/patternA_wallpaper.png"
             alt=""
             fill
             sizes="100vw"
             priority
-            className="object-cover opacity-25"
+            style={{ objectFit: "cover", objectPosition: "center 30%" }}
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-zinc-950/40 via-zinc-950/70 to-zinc-950" />
-        </div>
-
-        <div className="max-w-5xl mx-auto px-4 py-20 sm:py-28 text-center">
-          <Image
-            src="/images/patternA_icon.png"
-            alt={BRAND}
-            width={120}
-            height={120}
-            priority
-            className="mx-auto rounded-2xl shadow-2xl ring-1 ring-amber-400/30"
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              background:
+                "linear-gradient(180deg, rgba(10,10,12,.6) 0%, rgba(10,10,12,.2) 35%, rgba(10,10,12,.85) 80%, rgba(10,10,12,1) 100%)",
+            }}
           />
-          <h1 className="mt-8 text-4xl sm:text-5xl font-black tracking-tight">
-            <span className="brand-gradient">{BRAND}</span>
-          </h1>
-          <p className="mt-3 text-lg sm:text-xl text-zinc-300 font-medium">
-            火水木のNAR本命厳格 — 会員限定・無料閲覧
-          </p>
-          <div className="brand-divider w-32 mx-auto my-6" />
-          <p className="max-w-xl mx-auto text-sm sm:text-base text-zinc-400 leading-relaxed">
-            独自AIの合議シグナルから、<br className="sm:hidden" />
-            条件を満たした<strong className="text-amber-300">本命のみ</strong>を厳選。<br />
-            毎週<strong className="text-amber-300">火・水・木</strong>に配信します。
-          </p>
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              background: "linear-gradient(90deg, rgba(10,10,12,.7) 0%, transparent 50%)",
+            }}
+          />
 
-          {!isLoggedIn ? (
-            <div className="mt-10 flex flex-col items-center gap-3">
-              <Link
-                href="/login"
-                className="inline-flex items-center gap-2 px-8 py-3.5 rounded-lg bg-[#06C755] hover:bg-[#05b94d] text-white font-bold text-base shadow-lg transition-transform hover:scale-105"
+          <div
+            style={{
+              position: "absolute",
+              left: 56,
+              bottom: 80,
+              right: 56,
+              display: "flex",
+              alignItems: "flex-end",
+              justifyContent: "space-between",
+              gap: 60,
+            }}
+          >
+            <div style={{ maxWidth: 640 }}>
+              <Eyebrow dot>NAR · 火水木 · 会員限定無料</Eyebrow>
+              <h1
+                style={{
+                  fontFamily: "var(--font-serif)",
+                  fontSize: 96,
+                  fontWeight: 800,
+                  lineHeight: 1.02,
+                  margin: "24px 0 0",
+                  letterSpacing: "-.01em",
+                }}
               >
-                <LineIcon />
-                LINEで会員登録 (無料)
-              </Link>
-              <p className="text-xs text-zinc-500">
-                LINEログイン + 公式アカウント友だち追加が必要です
+                <GradientGold>本命の、</GradientGold>
+                <br />
+                <span style={{ color: COLORS.ink }}>その一頭だけを。</span>
+              </h1>
+              <p
+                style={{
+                  marginTop: 26,
+                  fontSize: 17,
+                  lineHeight: 1.85,
+                  color: COLORS.inkSoft,
+                  maxWidth: 540,
+                }}
+              >
+                独自AIの合議シグナルから条件を満たした
+                <strong style={{ color: COLORS.gold }}>本命のみ</strong>を厳選。 毎週
+                <strong style={{ color: COLORS.gold }}>火・水・木</strong>に配信。
               </p>
+              <div style={{ marginTop: 36, display: "flex", alignItems: "center", gap: 24 }}>
+                {!isLoggedIn ? (
+                  <>
+                    <GreenCTA>LINEで会員登録 (無料)</GreenCTA>
+                    <div>
+                      <div
+                        style={{
+                          fontSize: 12,
+                          color: COLORS.gold,
+                          fontWeight: 700,
+                          letterSpacing: ".15em",
+                        }}
+                      >
+                        FREE · NO PAYMENT
+                      </div>
+                      <div style={{ fontSize: 12, color: COLORS.inkMute, marginTop: 4 }}>
+                        月額課金や決済登録は一切ありません
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <GreenCTA href="/today">本日の本命を見る</GreenCTA>
+                )}
+              </div>
             </div>
-          ) : (
-            <div className="mt-10">
-              <Link
-                href="/today"
-                className="inline-flex items-center gap-2 px-8 py-3.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-zinc-950 font-bold text-base shadow-lg transition-transform hover:scale-105"
-              >
-                本日の本命を見る →
-              </Link>
-            </div>
-          )}
-        </div>
-      </section>
 
-      {/* Why */}
-      <section className="py-16 border-t border-zinc-800">
-        <div className="max-w-3xl mx-auto px-4">
-          <h2 className="text-2xl sm:text-3xl font-black text-center mb-10">
-            <span className="brand-gradient">なぜ火水木だけなのか</span>
-          </h2>
-          <div className="space-y-6 text-zinc-300">
-            <Card title="統計的根拠">
-              過去2ヶ月のクリーンデータで <strong className="text-amber-300">火水木 限定 + 旧強5会場 + 5-8人気 + 6-12頭 + 独自AI 2-3基一致</strong> という条件を満たすレースは、サンプル数 145件 / 回収率 396.9% / Bootstrap 95% 信頼区間下限 225% という統計を示しています。
-            </Card>
-            <Card title="月・金は配信しません">
-              他曜日では同条件が揃わず、サンプル不足で安定した期待値を示せないため<strong className="text-amber-300">あえて配信を見送ります</strong>。「いつでも当てる」を装わず、「ここしかない」だけを正直に届けます。
-            </Card>
-            <Card title="本命のみ・押し付けない">
-              買い目は <strong className="text-amber-300">単勝 100円</strong> 固定。1点で投資額をカバーする運用前提で、外れる日もあります。投資判断はあなた自身で。
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* How to use */}
-      <section className="py-16 border-t border-zinc-800">
-        <div className="max-w-3xl mx-auto px-4">
-          <h2 className="text-2xl sm:text-3xl font-black text-center mb-10">
-            <span className="brand-gradient">使い方</span>
-          </h2>
-          <ol className="space-y-4">
-            <Step n={1}>
-              <strong>LINEログイン</strong> + <strong>公式アカウント友だち追加</strong>（どちらも無料）
-            </Step>
-            <Step n={2}>
-              <strong>火・水・木の朝</strong>、本日の本命ページにアクセス
-            </Step>
-            <Step n={3}>
-              該当レースが出ていれば <strong>各本命に単勝100円</strong>。該当なしの日は配信なし
-            </Step>
-            <Step n={4}>
-              翌日、戦果サマリで結果と回収率を確認
-            </Step>
-          </ol>
-        </div>
-      </section>
-
-      {/* CTA */}
-      {!isLoggedIn && (
-        <section className="py-16 border-t border-zinc-800">
-          <div className="max-w-xl mx-auto px-4 text-center">
-            <h2 className="text-2xl font-black mb-4">
-              <span className="brand-gradient">今すぐ無料で始める</span>
-            </h2>
-            <p className="text-sm text-zinc-400 mb-8">
-              LINEでログインして、公式アカウントを友だち追加するだけ。<br />
-              月額課金や決済情報の登録は一切ありません。
-            </p>
-            <Link
-              href="/login"
-              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-lg bg-[#06C755] hover:bg-[#05b94d] text-white font-bold shadow-lg transition-transform hover:scale-105"
-            >
-              <LineIcon />
-              LINEで会員登録
-            </Link>
+            <NextDeliveryCard />
           </div>
         </section>
-      )}
+      </div>
+
+      {/* Stats strip */}
+      <StatsStripDesktop />
+
+      {/* Why */}
+      <WhyDesktop />
+
+      {/* How to use */}
+      <HowToUseDesktop />
 
       <Footer />
-    </>
-  );
-}
-
-function Card({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <div className="rounded-xl bg-zinc-900/60 border border-zinc-800 p-6">
-      <h3 className="text-lg font-bold text-amber-300 mb-2">{title}</h3>
-      <p className="text-sm leading-relaxed text-zinc-300">{children}</p>
     </div>
   );
 }
 
-function Step({ n, children }: { n: number; children: React.ReactNode }) {
+function NextDeliveryCard() {
   return (
-    <li className="flex gap-4 items-start">
-      <span className="flex-none w-9 h-9 rounded-full bg-amber-500 text-zinc-950 font-black flex items-center justify-center">
-        {n}
-      </span>
-      <p className="pt-1.5 text-sm leading-relaxed text-zinc-300">{children}</p>
-    </li>
+    <div
+      style={{
+        width: 280,
+        padding: 24,
+        borderRadius: 16,
+        background: "rgba(20,18,16,.6)",
+        backdropFilter: "blur(20px)",
+        border: `1px solid ${COLORS.goldSoft}`,
+      }}
+    >
+      <Eyebrow>NEXT DELIVERY</Eyebrow>
+      <div
+        style={{
+          marginTop: 10,
+          fontFamily: "var(--font-serif)",
+          fontSize: 28,
+          fontWeight: 700,
+          color: COLORS.ink,
+        }}
+      >
+        火 · 水 · 木
+      </div>
+      <div style={{ height: 1, background: COLORS.line, margin: "16px 0" }} />
+      <Eyebrow>RECOVERY · 2MO</Eyebrow>
+      <div
+        style={{
+          fontFamily: "var(--font-roman)",
+          fontSize: 56,
+          fontWeight: 500,
+          lineHeight: 1,
+          marginTop: 6,
+          background: GRADIENTS.goldSolid,
+          WebkitBackgroundClip: "text",
+          backgroundClip: "text",
+          color: "transparent",
+        }}
+      >
+        {STATS_RECOVERY}
+      </div>
+      <div style={{ fontSize: 11, color: COLORS.inkMute, marginTop: 4 }}>
+        n={STATS_SAMPLES} · 単勝100円固定
+      </div>
+    </div>
   );
 }
 
-function LineIcon() {
+function StatsStripDesktop() {
+  const items = [
+    { l: "回収率", v: STATS_RECOVERY, n: "RECOVERY RATE" },
+    { l: "信頼区間下限", v: STATS_CI_LOWER, n: "95% CI LOWER" },
+    { l: "サンプル", v: STATS_SAMPLES, n: "RACES · 2MO" },
+    { l: "投資単位", v: STATS_UNIT, n: "UNIT FIXED" },
+  ];
   return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-      <path d="M19.952 11.022c0-3.554-3.564-6.444-7.945-6.444s-7.946 2.89-7.946 6.444c0 3.184 2.825 5.852 6.642 6.355.258.056.61.171.7.391.08.2.052.514.025.717l-.114.681c-.035.201-.16.787.69.43.852-.358 4.583-2.7 6.252-4.62 1.152-1.262 1.696-2.541 1.696-3.954zm-10.74 1.901h-1.578c-.23 0-.418-.187-.418-.418V9.464c0-.23.187-.418.418-.418.23 0 .418.187.418.418v2.624h1.16c.232 0 .419.187.419.418 0 .23-.187.417-.419.417zm1.66-.418c0 .23-.187.418-.417.418-.231 0-.419-.187-.419-.418V9.464c0-.23.188-.418.419-.418.23 0 .417.187.417.418v3.041zm3.65 0c0 .18-.115.34-.286.397-.043.014-.088.021-.132.021-.131 0-.255-.062-.334-.167l-1.61-2.198v1.947c0 .23-.188.418-.42.418-.23 0-.417-.187-.417-.418V9.464c0-.18.115-.34.286-.397.043-.013.088-.021.132-.021.131 0 .256.063.334.167l1.61 2.198V9.464c0-.23.188-.418.419-.418.23 0 .418.188.418.418v3.041zm2.752-1.937c.231 0 .418.187.418.418 0 .23-.187.417-.418.417h-1.16v.685h1.16c.231 0 .418.188.418.419 0 .23-.187.417-.418.417h-1.578c-.23 0-.418-.187-.418-.417V9.464c0-.23.188-.418.418-.418h1.578c.231 0 .418.187.418.418 0 .23-.187.418-.418.418h-1.16v.686h1.16z" />
-    </svg>
+    <section style={{ padding: "60px 56px", borderBottom: `1px solid ${COLORS.line}` }}>
+      <div style={{ display: "flex", alignItems: "baseline", gap: 16, marginBottom: 30 }}>
+        <Eyebrow>TRACK RECORD</Eyebrow>
+        <div style={{ fontSize: 12, color: COLORS.inkMute }}>過去2ヶ月のクリーンデータ</div>
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 24 }}>
+        {items.map((x, i) => (
+          <div key={i}>
+            <div
+              style={{ fontSize: 10, color: COLORS.inkMute, letterSpacing: ".25em" }}
+            >
+              {x.n}
+            </div>
+            <div
+              style={{
+                fontFamily: "var(--font-roman)",
+                fontSize: 64,
+                fontWeight: 500,
+                marginTop: 4,
+                lineHeight: 1,
+                background: GRADIENTS.inkToGold,
+                WebkitBackgroundClip: "text",
+                backgroundClip: "text",
+                color: "transparent",
+              }}
+            >
+              {x.v}
+            </div>
+            <div style={{ fontSize: 13, color: COLORS.inkSoft, marginTop: 6 }}>{x.l}</div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function WhyDesktop() {
+  const cards = [
+    {
+      t: "統計的根拠",
+      b: `サンプル${STATS_SAMPLES}件 / 回収率 ${STATS_RECOVERY} / Bootstrap 95% 信頼区間下限 ${STATS_CI_LOWER}。火水木 × 旧強5会場 × 独自AI 2-3基一致。`,
+    },
+    {
+      t: "月・金は配信しません",
+      b: "他曜日では同条件が揃わず、サンプル不足で安定した期待値を示せないため、あえて配信を見送ります。",
+    },
+    {
+      t: "本命のみ・押し付けない",
+      b: "買い目は単勝100円固定。1点で投資額をカバーする運用前提で、外れる日もあります。投資判断はあなた自身で。",
+    },
+  ];
+  return (
+    <section style={{ padding: "100px 56px" }}>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr",
+          gap: 80,
+          alignItems: "center",
+        }}
+      >
+        <div>
+          <Eyebrow>FEATURE · 01</Eyebrow>
+          <h2
+            style={{
+              fontFamily: "var(--font-serif)",
+              fontSize: 56,
+              fontWeight: 700,
+              margin: "12px 0 0",
+              lineHeight: 1.15,
+            }}
+          >
+            なぜ
+            <br />
+            <GradientGoldOnly>火水木</GradientGoldOnly>
+            だけなのか
+          </h2>
+          <p
+            style={{
+              marginTop: 20,
+              fontSize: 14,
+              lineHeight: 2,
+              color: COLORS.inkSoft,
+              maxWidth: 460,
+            }}
+          >
+            「いつでも当てる」を装わず、「ここしかない」だけを正直に届ける。
+            統計的根拠のあるパターンに条件を絞り、それ以外は配信しません。
+          </p>
+        </div>
+        <div style={{ display: "grid", gap: 12 }}>
+          {cards.map((c, i) => (
+            <GoldCard key={i}>
+              <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                <span
+                  style={{
+                    width: 28,
+                    height: 28,
+                    borderRadius: 999,
+                    background: GRADIENTS.goldSolid,
+                    color: COLORS.bg,
+                    fontSize: 12,
+                    fontWeight: 800,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontFamily: "var(--font-roman)",
+                  }}
+                >
+                  {i + 1}
+                </span>
+                <h3 style={{ fontSize: 17, fontWeight: 700, margin: 0, color: COLORS.gold }}>
+                  {c.t}
+                </h3>
+              </div>
+              <p
+                style={{
+                  margin: "12px 0 0",
+                  fontSize: 13,
+                  lineHeight: 1.85,
+                  color: COLORS.inkSoft,
+                }}
+              >
+                {c.b}
+              </p>
+            </GoldCard>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function HowToUseDesktop() {
+  const steps = [
+    { t: "LINE登録", s: "ログイン + 友だち追加（無料）" },
+    { t: "アクセス", s: "火・水・木の朝、本命ページへ" },
+    { t: "投票", s: "該当レースに単勝100円" },
+    { t: "確認", s: "翌日、戦果サマリで結果と回収率" },
+  ];
+  return (
+    <section
+      style={{
+        padding: "60px 56px 100px",
+        borderTop: `1px solid ${COLORS.line}`,
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          alignItems: "baseline",
+          justifyContent: "space-between",
+          marginBottom: 36,
+        }}
+      >
+        <div>
+          <Eyebrow>FEATURE · 02</Eyebrow>
+          <h2
+            style={{
+              fontFamily: "var(--font-serif)",
+              fontSize: 48,
+              fontWeight: 700,
+              margin: "10px 0 0",
+            }}
+          >
+            使い方
+          </h2>
+        </div>
+        <div style={{ fontSize: 12, color: COLORS.inkMute }}>4 STEPS · 約30秒</div>
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16 }}>
+        {steps.map((s, i) => (
+          <div
+            key={i}
+            style={{
+              padding: 24,
+              borderRadius: 14,
+              background: "linear-gradient(180deg, rgba(230,185,74,.05), transparent)",
+              border: `1px solid ${COLORS.goldSoft}`,
+              position: "relative",
+              overflow: "hidden",
+            }}
+          >
+            <div
+              style={{
+                position: "absolute",
+                top: -20,
+                right: -10,
+                fontFamily: "var(--font-roman)",
+                fontSize: 110,
+                fontWeight: 500,
+                color: "rgba(230,185,74,.1)",
+                lineHeight: 1,
+              }}
+            >
+              {i + 1}
+            </div>
+            <h3
+              style={{
+                fontSize: 16,
+                fontWeight: 800,
+                margin: 0,
+                color: COLORS.gold,
+                position: "relative",
+              }}
+            >
+              STEP {String(i + 1).padStart(2, "0")}
+            </h3>
+            <div
+              style={{
+                marginTop: 12,
+                fontFamily: "var(--font-serif)",
+                fontSize: 22,
+                fontWeight: 700,
+                position: "relative",
+              }}
+            >
+              {s.t}
+            </div>
+            <p
+              style={{
+                margin: "10px 0 0",
+                fontSize: 13,
+                lineHeight: 1.7,
+                color: COLORS.inkSoft,
+                position: "relative",
+              }}
+            >
+              {s.s}
+            </p>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/* ============================================================
+ * Mobile (375px design)
+ * ============================================================ */
+
+function MobileTop({ isLoggedIn }: { isLoggedIn: boolean }) {
+  return (
+    <div style={{ background: COLORS.bg, color: COLORS.ink }}>
+      <Header isLoggedIn={isLoggedIn} />
+
+      {/* Hero */}
+      <section style={{ position: "relative", height: 620, overflow: "hidden" }}>
+        <Image
+          src="/images/patternA_wallpaper.png"
+          alt=""
+          fill
+          sizes="100vw"
+          priority
+          style={{ objectFit: "cover", objectPosition: "center 25%" }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            background:
+              "linear-gradient(180deg, rgba(10,10,12,.45) 0%, rgba(10,10,12,.15) 30%, rgba(10,10,12,.9) 75%, rgba(10,10,12,1) 100%)",
+          }}
+        />
+        <div style={{ position: "absolute", left: 20, right: 20, bottom: 28 }}>
+          <Eyebrow dot size="sm">
+            NAR · 火水木 · 無料
+          </Eyebrow>
+          <h1
+            style={{
+              fontFamily: "var(--font-serif)",
+              fontSize: 44,
+              fontWeight: 800,
+              lineHeight: 1.05,
+              margin: "16px 0 0",
+            }}
+          >
+            <GradientGold>本命の、</GradientGold>
+            <br />
+            その一頭だけを。
+          </h1>
+          <p style={{ marginTop: 14, fontSize: 13.5, lineHeight: 1.8, color: COLORS.inkSoft }}>
+            独自AIの合議シグナルから条件を満たした
+            <strong style={{ color: COLORS.gold }}>本命のみ</strong>を厳選。 毎週
+            <strong style={{ color: COLORS.gold }}>火・水・木</strong>に配信。
+          </p>
+          <div style={{ marginTop: 22 }}>
+            {!isLoggedIn ? (
+              <GreenCTA size="md" full>
+                LINEで会員登録 (無料)
+              </GreenCTA>
+            ) : (
+              <GreenCTA href="/today" size="md" full>
+                本日の本命を見る
+              </GreenCTA>
+            )}
+            <div
+              style={{
+                marginTop: 10,
+                fontSize: 11,
+                color: COLORS.inkMute,
+                textAlign: "center",
+                lineHeight: 1.6,
+              }}
+            >
+              <span style={{ color: COLORS.gold, fontWeight: 700 }}>FREE · NO PAYMENT</span> ·
+              月額課金なし
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Quick stat card */}
+      <section style={{ padding: "20px 16px 8px" }}>
+        <div
+          style={{
+            padding: 18,
+            borderRadius: 14,
+            background: "rgba(20,18,16,.6)",
+            border: `1px solid ${COLORS.goldSoft}`,
+          }}
+        >
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+            <div>
+              <Eyebrow size="sm">NEXT DELIVERY</Eyebrow>
+              <div
+                style={{
+                  marginTop: 4,
+                  fontFamily: "var(--font-serif)",
+                  fontSize: 22,
+                  fontWeight: 700,
+                }}
+              >
+                火 · 水 · 木
+              </div>
+            </div>
+            <div>
+              <Eyebrow size="sm">RECOVERY · 2MO</Eyebrow>
+              <div
+                style={{
+                  fontFamily: "var(--font-roman)",
+                  fontSize: 30,
+                  fontWeight: 500,
+                  lineHeight: 1,
+                  marginTop: 4,
+                  background: GRADIENTS.goldSolid,
+                  WebkitBackgroundClip: "text",
+                  backgroundClip: "text",
+                  color: "transparent",
+                }}
+              >
+                {STATS_RECOVERY}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Stats 2x2 */}
+      <section style={{ padding: "30px 16px", borderBottom: `1px solid ${COLORS.line}` }}>
+        <Eyebrow size="sm">TRACK RECORD</Eyebrow>
+        <div style={{ fontSize: 11, color: COLORS.inkMute, marginTop: 4, marginBottom: 16 }}>
+          過去2ヶ月のクリーンデータ
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+          {[
+            { l: "回収率", v: STATS_RECOVERY, n: "RECOVERY" },
+            { l: "信頼区間下限", v: STATS_CI_LOWER, n: "95% CI" },
+            { l: "サンプル", v: STATS_SAMPLES, n: "RACES" },
+            { l: "投資単位", v: STATS_UNIT, n: "UNIT" },
+          ].map((x, i) => (
+            <div key={i}>
+              <div style={{ fontSize: 9, color: COLORS.inkMute, letterSpacing: ".22em" }}>
+                {x.n}
+              </div>
+              <div
+                style={{
+                  fontFamily: "var(--font-roman)",
+                  fontSize: 36,
+                  fontWeight: 500,
+                  marginTop: 2,
+                  lineHeight: 1,
+                  background: GRADIENTS.inkToGold,
+                  WebkitBackgroundClip: "text",
+                  backgroundClip: "text",
+                  color: "transparent",
+                }}
+              >
+                {x.v}
+              </div>
+              <div style={{ fontSize: 11, color: COLORS.inkSoft, marginTop: 4 }}>{x.l}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* なぜ火水木 */}
+      <section style={{ padding: "40px 16px" }}>
+        <Eyebrow size="sm">FEATURE · 01</Eyebrow>
+        <h2
+          style={{
+            fontFamily: "var(--font-serif)",
+            fontSize: 32,
+            fontWeight: 700,
+            margin: "10px 0 16px",
+            lineHeight: 1.2,
+          }}
+        >
+          なぜ<GradientGoldOnly>火水木</GradientGoldOnly>だけなのか
+        </h2>
+        <div style={{ display: "grid", gap: 10 }}>
+          {[
+            { t: "統計的根拠", b: `n=${STATS_SAMPLES}, 回収率${STATS_RECOVERY}, CI下限${STATS_CI_LOWER}` },
+            { t: "月・金は配信しません", b: "サンプル不足で根拠が立たない曜日は配信を見送ります" },
+            { t: "本命のみ・押し付けない", b: "単勝100円固定。投資判断はあなた自身で" },
+          ].map((c, i) => (
+            <GoldCard key={i} style={{ padding: 16 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                <span
+                  style={{
+                    width: 22,
+                    height: 22,
+                    borderRadius: 999,
+                    background: GRADIENTS.goldSolid,
+                    color: COLORS.bg,
+                    fontSize: 11,
+                    fontWeight: 800,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontFamily: "var(--font-roman)",
+                  }}
+                >
+                  {i + 1}
+                </span>
+                <h3 style={{ fontSize: 14, fontWeight: 700, margin: 0, color: COLORS.gold }}>
+                  {c.t}
+                </h3>
+              </div>
+              <p
+                style={{
+                  margin: "8px 0 0",
+                  fontSize: 12,
+                  lineHeight: 1.7,
+                  color: COLORS.inkSoft,
+                }}
+              >
+                {c.b}
+              </p>
+            </GoldCard>
+          ))}
+        </div>
+      </section>
+
+      {/* 使い方 */}
+      <section style={{ padding: "30px 16px 50px", borderTop: `1px solid ${COLORS.line}` }}>
+        <Eyebrow size="sm">FEATURE · 02</Eyebrow>
+        <h2
+          style={{
+            fontFamily: "var(--font-serif)",
+            fontSize: 28,
+            fontWeight: 700,
+            margin: "10px 0 16px",
+          }}
+        >
+          使い方
+        </h2>
+        <div style={{ display: "grid", gap: 10 }}>
+          {[
+            { t: "LINE登録", s: "ログイン + 友だち追加（無料）" },
+            { t: "アクセス", s: "火・水・木の朝、本命ページへ" },
+            { t: "投票", s: "該当レースに単勝100円" },
+            { t: "確認", s: "翌日、戦果サマリで結果と回収率" },
+          ].map((s, i) => (
+            <div
+              key={i}
+              style={{
+                padding: 14,
+                borderRadius: 10,
+                border: `1px solid ${COLORS.goldSoft}`,
+                background: "linear-gradient(180deg, rgba(230,185,74,.05), transparent)",
+                display: "flex",
+                gap: 12,
+                alignItems: "center",
+              }}
+            >
+              <div
+                style={{
+                  fontFamily: "var(--font-roman)",
+                  fontSize: 26,
+                  fontWeight: 500,
+                  color: COLORS.gold,
+                  width: 30,
+                }}
+              >
+                {String(i + 1).padStart(2, "0")}
+              </div>
+              <div>
+                <div
+                  style={{
+                    fontFamily: "var(--font-serif)",
+                    fontSize: 15,
+                    fontWeight: 700,
+                  }}
+                >
+                  {s.t}
+                </div>
+                <div style={{ fontSize: 11, color: COLORS.inkSoft, marginTop: 2 }}>{s.s}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <Footer />
+    </div>
   );
 }
