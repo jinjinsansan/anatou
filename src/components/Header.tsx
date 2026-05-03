@@ -27,6 +27,12 @@ export function Header({ isLoggedIn = false }: { isLoggedIn?: boolean }) {
             本日の本命
           </Link>
           <Link
+            href="/results"
+            className="text-zinc-300 hover:text-amber-300 transition"
+          >
+            的中実績
+          </Link>
+          <Link
             href="/about"
             className="text-zinc-300 hover:text-amber-300 transition"
           >

@@ -3,7 +3,14 @@
 // 内部の golden-pattern API を叩いて型変換 + 内部用語を除去
 // ============================================================
 import { serverEnv } from "./env";
-import type { DailyPattern, RecommendationRace } from "@/types";
+import type {
+  DailyPattern,
+  HistoryMonthly,
+  HistoryRace,
+  HistoryReport,
+  HistorySummary,
+  RecommendationRace,
+} from "@/types";
 
 const WD_LABELS = ["月", "火", "水", "木", "金", "土", "日"];
 const LAYER1_WEEKDAYS = new Set([1, 2, 3]); // 火水木
@@ -94,4 +101,112 @@ function parseWeekday(yyyymmdd: string): number {
   // JS Date.getDay(): 0=Sun..6=Sat なので 月=0..日=6 に変換
   const day = new Date(y, m, d).getDay();
   return (day + 6) % 7;
+}
+
+interface InternalHistoryRace {
+  date?: string;
+  weekday?: string;
+  venue?: string;
+  race_number?: number;
+  race_name?: string;
+  horse_number?: number | null;
+  horse_name?: string;
+  popularity_rank?: number | null;
+  agreed_count?: number;
+  result_known?: boolean;
+  won?: boolean;
+  payout?: number;
+  profit?: number | null;
+}
+
+interface InternalHistoryMonthly {
+  ym?: string;
+  n?: number;
+  hits?: number;
+  finished?: number;
+  invest?: number;
+  payout?: number;
+  profit?: number;
+  recovery_pct?: number;
+}
+
+interface InternalHistorySummary {
+  n_total?: number;
+  n_finished?: number;
+  hits?: number;
+  invest?: number;
+  payout?: number;
+  profit?: number;
+  recovery_pct?: number;
+  hit_rate_pct?: number;
+}
+
+interface InternalHistoryResponse {
+  summary?: InternalHistorySummary;
+  monthly?: InternalHistoryMonthly[];
+  races?: InternalHistoryRace[];
+}
+
+/**
+ * 全期間の Layer 1 (NAR本命厳格) 履歴を取得。
+ * 内部用語を除去してクリーンな形式で返す。
+ */
+export async function fetchHistory(): Promise<HistoryReport> {
+  const base = serverEnv.predictionsApiBase();
+  const token = serverEnv.predictionsApiToken();
+
+  const url = new URL("/api/data/golden-pattern/history", base);
+  url.searchParams.set("race_type", "nar");
+
+  const headers: Record<string, string> = {};
+  if (token) headers["Authorization"] = `Bearer ${token}`;
+
+  const res = await fetch(url.toString(), {
+    headers,
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    throw new Error(`history api error: ${res.status}`);
+  }
+  const data: InternalHistoryResponse = await res.json();
+
+  const summary: HistorySummary = {
+    nTotal: Number(data.summary?.n_total ?? 0),
+    nFinished: Number(data.summary?.n_finished ?? 0),
+    hits: Number(data.summary?.hits ?? 0),
+    invest: Number(data.summary?.invest ?? 0),
+    payout: Number(data.summary?.payout ?? 0),
+    profit: Number(data.summary?.profit ?? 0),
+    recoveryPct: Number(data.summary?.recovery_pct ?? 0),
+    hitRatePct: Number(data.summary?.hit_rate_pct ?? 0),
+  };
+
+  const monthly: HistoryMonthly[] = (data.monthly ?? []).map((m) => ({
+    ym: String(m.ym ?? ""),
+    n: Number(m.n ?? 0),
+    hits: Number(m.hits ?? 0),
+    finished: Number(m.finished ?? 0),
+    invest: Number(m.invest ?? 0),
+    payout: Number(m.payout ?? 0),
+    profit: Number(m.profit ?? 0),
+    recoveryPct: Number(m.recovery_pct ?? 0),
+  }));
+
+  const races: HistoryRace[] = (data.races ?? []).map((r) => ({
+    date: String(r.date ?? ""),
+    weekday: String(r.weekday ?? ""),
+    venue: String(r.venue ?? ""),
+    raceNumber: Number(r.race_number ?? 0),
+    raceName: String(r.race_name ?? ""),
+    horseNumber: r.horse_number ?? null,
+    horseName: String(r.horse_name ?? ""),
+    popularityRank: r.popularity_rank ?? null,
+    agreedCount: Number(r.agreed_count ?? 0),
+    resultKnown: Boolean(r.result_known),
+    won: Boolean(r.won),
+    payout: Number(r.payout ?? 0),
+    profit: r.profit ?? null,
+  }));
+
+  return { summary, monthly, races };
 }

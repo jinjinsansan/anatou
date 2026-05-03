@@ -43,3 +43,51 @@ export interface DailyPattern {
   isLayer1Day: boolean; // 火水木 のみ true
   recommendations: RecommendationRace[];
 }
+
+/**
+ * 過去実績のレース1件分。
+ * 内部用語（エンジン名等）は含まない。
+ */
+export interface HistoryRace {
+  date: string; // YYYYMMDD
+  weekday: string;
+  venue: string;
+  raceNumber: number;
+  raceName: string;
+  horseNumber: number | null;
+  horseName: string;
+  popularityRank: number | null;
+  agreedCount: number;
+  resultKnown: boolean;
+  won: boolean;
+  payout: number; // 単勝払戻（外れは0）
+  profit: number | null; // 結果未確定時は null
+}
+
+export interface HistoryMonthly {
+  ym: string; // YYYY-MM
+  n: number;
+  hits: number;
+  finished: number;
+  invest: number;
+  payout: number;
+  profit: number;
+  recoveryPct: number;
+}
+
+export interface HistorySummary {
+  nTotal: number;
+  nFinished: number;
+  hits: number;
+  invest: number;
+  payout: number;
+  profit: number;
+  recoveryPct: number;
+  hitRatePct: number;
+}
+
+export interface HistoryReport {
+  summary: HistorySummary;
+  monthly: HistoryMonthly[];
+  races: HistoryRace[];
+}
