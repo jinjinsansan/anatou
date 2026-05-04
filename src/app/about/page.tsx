@@ -3,23 +3,20 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Eyebrow, GoldCard, GradientGold } from "@/components/ui";
 import { COLORS, GRADIENTS } from "@/lib/design-tokens";
-import { getSession } from "@/lib/session";
 
 export const metadata = {
   title: "運用ルール",
 };
 
-export default async function AboutPage() {
-  const session = await getSession();
-  const isLoggedIn = Boolean(session.user);
-
+// 認証不要の静的ページ — getSession() を呼ばないことで静的ビルド対象になる
+export default function AboutPage() {
   return (
     <>
       <div className="hidden md:block">
-        <DesktopAbout isLoggedIn={isLoggedIn} />
+        <DesktopAbout isLoggedIn={false} />
       </div>
       <div className="block md:hidden">
-        <MobileAbout isLoggedIn={isLoggedIn} />
+        <MobileAbout isLoggedIn={false} />
       </div>
     </>
   );
