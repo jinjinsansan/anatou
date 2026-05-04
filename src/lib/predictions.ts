@@ -2,6 +2,7 @@
 // バックエンドAPI プロキシ層 (サーバー側のみ)
 // 内部の golden-pattern API を叩いて型変換 + 内部用語を除去
 // ============================================================
+import { cacheLife } from "next/cache";
 import { serverEnv } from "./env";
 import type {
   DailyPattern,
@@ -150,9 +151,12 @@ interface InternalHistoryResponse {
 
 /**
  * 全期間の Layer 1 (NAR本命厳格) 履歴を取得。
- * 内部用語を除去してクリーンな形式で返す。
+ * 1日キャッシュ — 毎回APIを叩かない。
  */
 export async function fetchHistory(): Promise<HistoryReport> {
+  "use cache";
+  cacheLife("days");
+
   const base = serverEnv.predictionsApiBase();
   const token = serverEnv.predictionsApiToken();
 
@@ -164,8 +168,7 @@ export async function fetchHistory(): Promise<HistoryReport> {
 
   const res = await fetch(url.toString(), {
     headers,
-    cache: "no-store",
-    signal: AbortSignal.timeout(5000),
+    signal: AbortSignal.timeout(30000),
   });
   if (!res.ok) {
     throw new Error(`history api error: ${res.status}`);
