@@ -35,104 +35,107 @@ export default async function HomePage() {
 function DesktopTop({ isLoggedIn }: { isLoggedIn: boolean }) {
   return (
     <div style={{ background: COLORS.bg, color: COLORS.ink }}>
-      {/* Hero: position:relativeのsection内にHeaderをabsoluteで重ねる。
-          overflow:hiddenなし → Headerがクリッピングされない */}
-      <section style={{ position: "relative", height: 820 }}>
-        <Image
-          src="/images/patternA_wallpaper.png"
-          alt=""
-          fill
-          sizes="100vw"
-          priority
-          style={{ objectFit: "cover", objectPosition: "center 30%" }}
-        />
-        {/* グラデーションオーバーレイ */}
-        <div
-          style={{
-            position: "absolute", inset: 0,
-            background:
-              "linear-gradient(180deg, rgba(10,10,12,.6) 0%, rgba(10,10,12,.2) 35%, rgba(10,10,12,.85) 80%, rgba(10,10,12,1) 100%)",
-          }}
-        />
-        <div
-          style={{
-            position: "absolute", inset: 0,
-            background: "linear-gradient(90deg, rgba(10,10,12,.7) 0%, transparent 50%)",
-          }}
-        />
-
-        {/* Header: section内でtop:0にabsolute */}
+      {/* Header overlay on hero */}
+      <div style={{ position: "relative" }}>
         <Header isLoggedIn={isLoggedIn} variant="overlay" />
 
-        {/* Hero content: sectionの下部に配置 */}
-        <div
-          style={{
-            position: "absolute",
-            left: 56, right: 56, bottom: 80,
-            display: "flex",
-            alignItems: "flex-end",
-            justifyContent: "space-between",
-            gap: 60,
-          }}
-        >
-          <div style={{ maxWidth: 640 }}>
-            <Eyebrow dot>NAR · 火水木 · 会員限定無料</Eyebrow>
-            <h1
-              style={{
-                fontFamily: "var(--font-serif)",
-                fontSize: 96,
-                fontWeight: 800,
-                lineHeight: 1.02,
-                margin: "24px 0 0",
-                letterSpacing: "-.01em",
-              }}
-            >
-              <GradientGold>本命の、</GradientGold>
-              <br />
-              <span style={{ color: COLORS.ink }}>その一頭だけを。</span>
-            </h1>
-            <p
-              style={{
-                marginTop: 26,
-                fontSize: 17,
-                lineHeight: 1.85,
-                color: COLORS.inkSoft,
-                maxWidth: 540,
-              }}
-            >
-              独自AIの合議シグナルから条件を満たした
-              <strong style={{ color: COLORS.gold }}>本命のみ</strong>を厳選。 毎週
-              <strong style={{ color: COLORS.gold }}>火・水・木</strong>に配信。
-            </p>
-            <div style={{ marginTop: 36, display: "flex", alignItems: "center", gap: 24 }}>
-              {!isLoggedIn ? (
-                <>
-                  <GreenCTA>LINEで会員登録 (無料)</GreenCTA>
-                  <div>
-                    <div
-                      style={{
-                        fontSize: 12,
-                        color: COLORS.gold,
-                        fontWeight: 700,
-                        letterSpacing: ".15em",
-                      }}
-                    >
-                      FREE · NO PAYMENT
+        {/* Hero */}
+        <section style={{ position: "relative", height: 820, overflow: "hidden" }}>
+          <Image
+            src="/images/patternA_wallpaper.png"
+            alt=""
+            fill
+            sizes="100vw"
+            priority
+            style={{ objectFit: "cover", objectPosition: "center 30%" }}
+          />
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              background:
+                "linear-gradient(180deg, rgba(10,10,12,.6) 0%, rgba(10,10,12,.2) 35%, rgba(10,10,12,.85) 80%, rgba(10,10,12,1) 100%)",
+            }}
+          />
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              background: "linear-gradient(90deg, rgba(10,10,12,.7) 0%, transparent 50%)",
+            }}
+          />
+
+          <div
+            style={{
+              position: "absolute",
+              left: 56,
+              bottom: 80,
+              right: 56,
+              display: "flex",
+              alignItems: "flex-end",
+              justifyContent: "space-between",
+              gap: 60,
+            }}
+          >
+            <div style={{ maxWidth: 640 }}>
+              <Eyebrow dot>NAR · 火水木 · 会員限定無料</Eyebrow>
+              <h1
+                style={{
+                  fontFamily: "var(--font-serif)",
+                  fontSize: 96,
+                  fontWeight: 800,
+                  lineHeight: 1.02,
+                  margin: "24px 0 0",
+                  letterSpacing: "-.01em",
+                }}
+              >
+                <GradientGold>本命の、</GradientGold>
+                <br />
+                <span style={{ color: COLORS.ink }}>その一頭だけを。</span>
+              </h1>
+              <p
+                style={{
+                  marginTop: 26,
+                  fontSize: 17,
+                  lineHeight: 1.85,
+                  color: COLORS.inkSoft,
+                  maxWidth: 540,
+                }}
+              >
+                独自AIの合議シグナルから条件を満たした
+                <strong style={{ color: COLORS.gold }}>本命のみ</strong>を厳選。 毎週
+                <strong style={{ color: COLORS.gold }}>火・水・木</strong>に配信。
+              </p>
+              <div style={{ marginTop: 36, display: "flex", alignItems: "center", gap: 24 }}>
+                {!isLoggedIn ? (
+                  <>
+                    <GreenCTA>LINEで会員登録 (無料)</GreenCTA>
+                    <div>
+                      <div
+                        style={{
+                          fontSize: 12,
+                          color: COLORS.gold,
+                          fontWeight: 700,
+                          letterSpacing: ".15em",
+                        }}
+                      >
+                        FREE · NO PAYMENT
+                      </div>
+                      <div style={{ fontSize: 12, color: COLORS.inkMute, marginTop: 4 }}>
+                        月額課金や決済登録は一切ありません
+                      </div>
                     </div>
-                    <div style={{ fontSize: 12, color: COLORS.inkMute, marginTop: 4 }}>
-                      月額課金や決済登録は一切ありません
-                    </div>
-                  </div>
-                </>
-              ) : (
-                <GreenCTA href="/today">本日の本命を見る</GreenCTA>
-              )}
+                  </>
+                ) : (
+                  <GreenCTA href="/today">本日の本命を見る</GreenCTA>
+                )}
+              </div>
             </div>
-          </div>
 
             <NextDeliveryCard />
           </div>
         </section>
+      </div>
 
       {/* Stats strip */}
       <StatsStripDesktop />
@@ -451,7 +454,7 @@ function MobileTop({ isLoggedIn }: { isLoggedIn: boolean }) {
       <Header isLoggedIn={isLoggedIn} />
 
       {/* Hero */}
-      <section style={{ position: "relative", height: 560 }}>
+      <section style={{ position: "relative", height: 620, overflow: "hidden" }}>
         <Image
           src="/images/patternA_wallpaper.png"
           alt=""
@@ -465,16 +468,10 @@ function MobileTop({ isLoggedIn }: { isLoggedIn: boolean }) {
             position: "absolute",
             inset: 0,
             background:
-              "linear-gradient(180deg, rgba(10,10,12,.55) 0%, rgba(10,10,12,.2) 25%, rgba(10,10,12,.88) 70%, rgba(10,10,12,1) 100%)",
+              "linear-gradient(180deg, rgba(10,10,12,.45) 0%, rgba(10,10,12,.15) 30%, rgba(10,10,12,.9) 75%, rgba(10,10,12,1) 100%)",
           }}
         />
-        <div
-          style={{
-            position: "absolute", inset: 0,
-            display: "flex", flexDirection: "column", justifyContent: "flex-end",
-            padding: "0 20px 32px",
-          }}
-        >
+        <div style={{ position: "absolute", left: 20, right: 20, bottom: 28 }}>
           <Eyebrow dot size="sm">
             NAR · 火水木 · 無料
           </Eyebrow>
