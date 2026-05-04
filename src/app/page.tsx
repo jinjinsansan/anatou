@@ -456,7 +456,7 @@ function MobileTop({ isLoggedIn }: { isLoggedIn: boolean }) {
       {/* Hero */}
       <section style={{ position: "relative", height: 620, overflow: "hidden" }}>
         <Image
-          src="/images/patternA_wallpaper.png"
+          src="/images/patternA_wallpaper_mobile.png"
           alt=""
           fill
           sizes="100vw"
