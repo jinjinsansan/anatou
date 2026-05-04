@@ -54,6 +54,7 @@ export async function fetchTodayPattern(dateYYYYMMDD?: string): Promise<DailyPat
   const res = await fetch(url.toString(), {
     headers,
     cache: "no-store",
+    signal: AbortSignal.timeout(5000),
   });
   if (!res.ok) {
     throw new Error(`predictions api error: ${res.status}`);
@@ -164,6 +165,7 @@ export async function fetchHistory(): Promise<HistoryReport> {
   const res = await fetch(url.toString(), {
     headers,
     cache: "no-store",
+    signal: AbortSignal.timeout(5000),
   });
   if (!res.ok) {
     throw new Error(`history api error: ${res.status}`);
