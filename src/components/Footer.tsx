@@ -1,4 +1,5 @@
 import { COLORS } from "@/lib/design-tokens";
+import { CurrentYear } from "./CurrentYear";
 
 export function Footer() {
   return (
@@ -30,7 +31,7 @@ function FooterContent({ compact = false }: { compact?: boolean }) {
       ) : (
         <>本サービスは情報提供を目的としており、馬券の購入を強制するものではありません。投資判断はご自身の責任で行ってください。<br /></>
       )}
-      <span style={{ color: "rgba(244,239,226,.3)" }}>© {new Date().getFullYear()} 穴党参謀AI</span>
+      <span style={{ color: "rgba(244,239,226,.3)" }}>© <CurrentYear /> 穴党参謀AI</span>
     </>
   );
 }
