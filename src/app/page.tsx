@@ -35,8 +35,9 @@ export default async function HomePage() {
 function DesktopTop({ isLoggedIn }: { isLoggedIn: boolean }) {
   return (
     <div style={{ background: COLORS.bg, color: COLORS.ink }}>
-      {/* Hero — Header is overlaid on top via position:absolute */}
-      <section style={{ position: "relative", height: 820, overflow: "hidden" }}>
+      {/* Hero: position:relativeのsection内にHeaderをabsoluteで重ねる。
+          overflow:hiddenなし → Headerがクリッピングされない */}
+      <section style={{ position: "relative", height: 820 }}>
         <Image
           src="/images/patternA_wallpaper.png"
           alt=""
@@ -45,32 +46,29 @@ function DesktopTop({ isLoggedIn }: { isLoggedIn: boolean }) {
           priority
           style={{ objectFit: "cover", objectPosition: "center 30%" }}
         />
+        {/* グラデーションオーバーレイ */}
         <div
           style={{
-            position: "absolute",
-            inset: 0,
+            position: "absolute", inset: 0,
             background:
               "linear-gradient(180deg, rgba(10,10,12,.6) 0%, rgba(10,10,12,.2) 35%, rgba(10,10,12,.85) 80%, rgba(10,10,12,1) 100%)",
           }}
         />
         <div
           style={{
-            position: "absolute",
-            inset: 0,
+            position: "absolute", inset: 0,
             background: "linear-gradient(90deg, rgba(10,10,12,.7) 0%, transparent 50%)",
           }}
         />
 
-        {/* Header overlaid at top */}
+        {/* Header: section内でtop:0にabsolute */}
         <Header isLoggedIn={isLoggedIn} variant="overlay" />
 
-        {/* Hero content — positioned at bottom of section */}
+        {/* Hero content: sectionの下部に配置 */}
         <div
           style={{
             position: "absolute",
-            left: 56,
-            right: 56,
-            bottom: 80,
+            left: 56, right: 56, bottom: 80,
             display: "flex",
             alignItems: "flex-end",
             justifyContent: "space-between",
@@ -132,9 +130,9 @@ function DesktopTop({ isLoggedIn }: { isLoggedIn: boolean }) {
             </div>
           </div>
 
-          <NextDeliveryCard />
-        </div>
-      </section>
+            <NextDeliveryCard />
+          </div>
+        </section>
 
       {/* Stats strip */}
       <StatsStripDesktop />
@@ -453,7 +451,7 @@ function MobileTop({ isLoggedIn }: { isLoggedIn: boolean }) {
       <Header isLoggedIn={isLoggedIn} />
 
       {/* Hero */}
-      <section style={{ position: "relative", height: 580, overflow: "hidden" }}>
+      <section style={{ position: "relative", height: 560 }}>
         <Image
           src="/images/patternA_wallpaper.png"
           alt=""
@@ -470,7 +468,13 @@ function MobileTop({ isLoggedIn }: { isLoggedIn: boolean }) {
               "linear-gradient(180deg, rgba(10,10,12,.55) 0%, rgba(10,10,12,.2) 25%, rgba(10,10,12,.88) 70%, rgba(10,10,12,1) 100%)",
           }}
         />
-        <div style={{ position: "absolute", left: 20, right: 20, bottom: 28 }}>
+        <div
+          style={{
+            position: "absolute", inset: 0,
+            display: "flex", flexDirection: "column", justifyContent: "flex-end",
+            padding: "0 20px 32px",
+          }}
+        >
           <Eyebrow dot size="sm">
             NAR · 火水木 · 無料
           </Eyebrow>
