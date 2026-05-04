@@ -11,7 +11,6 @@ import type { HistoryRace, HistoryReport, HistoryMonthly } from "@/types";
 const LINE_OFFICIAL_ID = process.env.LINE_OFFICIAL_ACCOUNT_ID ?? "@770clfua";
 
 export const metadata = { title: "的中実績" };
-export const dynamic = "force-dynamic";
 
 export default async function ResultsPage() {
   const session = await getSession();

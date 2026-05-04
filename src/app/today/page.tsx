@@ -15,8 +15,6 @@ export const metadata = {
   title: "本日の本命",
 };
 
-export const dynamic = "force-dynamic";
-
 interface SearchParams {
   searchParams: Promise<{ need_friend?: string }>;
 }
