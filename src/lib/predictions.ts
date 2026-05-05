@@ -55,7 +55,7 @@ export async function fetchTodayPattern(dateYYYYMMDD?: string): Promise<DailyPat
   const res = await fetch(url.toString(), {
     headers,
     cache: "no-store",
-    signal: AbortSignal.timeout(5000),
+    signal: AbortSignal.timeout(60000),
   });
   if (!res.ok) {
     throw new Error(`predictions api error: ${res.status}`);
